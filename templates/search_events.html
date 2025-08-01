@@ -1,0 +1,28 @@
+<!-- templates/search_events.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Events</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Search Events</h1>
+    <nav>
+      <a href="/">Home</a> | <a href="/clients">Clients</a> | <a href="/events">Events</a>
+    </nav>
+  </header>
+  <main>
+    <form method="GET" action="/events/search/results">
+      <label>Event Name: <input type="text" name="event_name"></label><br>
+      <label>Event Type: <input type="text" name="event_type"></label><br>
+      <label>Client ID: <input type="number" name="client_id"></label><br>
+      <label>Event Date From: <input type="date" name="event_date_from"></label><br>
+      <label>Event Date To: <input type="date" name="event_date_to"></label><br>
+      <button type="submit">Search</button>
+    </form>
+  </main>
+</body>
+</html>
