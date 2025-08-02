@@ -66,3 +66,35 @@ func ViewClientsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	http.NotFound(w, r)
 }
+
+// Handles links within events page
+
+// Create Events
+func CreateEventsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/create_events" {
+		path := filepath.Join("templates", "create_events.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
+
+// View Events
+func ViewEventsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/view_events" {
+		path := filepath.Join("templates", "view_events.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
+
+// Search Events
+func SearchEventsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/search_events" {
+		path := filepath.Join("templates", "search_events.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
