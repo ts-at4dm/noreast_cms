@@ -24,7 +24,7 @@ CREATE TABLE events (
     client_id INT,
     event_location VARCHAR(255),
     package VARCHAR(50),
-    ceremony TINYINT(1) DEFAULT 0,
+    guest_count INT,
     deposit_amount DECIMAL(10,2) NOT NULL,
     deposit_received TINYINT(1) DEFAULT 0,
     total_price DECIMAL(10,2) NOT NULL,
@@ -32,4 +32,28 @@ CREATE TABLE events (
     payment_date DATE,
     notes VARCHAR(255),
     FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+CREATE TABLE addons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO addons (name) VALUES 
+('Rehearsal Dinner'),
+('Bridal Shower'),
+('Engagement Party'),
+('After Party'),
+('Ceremony'),
+('Cocktail Hour'),
+('Tent Lighting'),
+('Photo Booth');
+
+CREATE TABLE event_addons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT,
+    addon_id INT,
+    price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    FOREIGN KEY (addon_id) REFERENCES addons(id)
 );
