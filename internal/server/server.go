@@ -28,7 +28,7 @@ func ServerStart() {
 	// Calls Handlers
 	setupHandlers()
 
-	log.Println("Starting server on :8080...")
+	log.Println("Server running on Port 8080...")
 
 	// Start the server and handle any errors
 	err := http.ListenAndServe(":8080", nil)
@@ -36,6 +36,4 @@ func ServerStart() {
 		log.Printf("Server failed to start: %v\n", err)
 		return
 	}
-
-	log.Println("Server started successfully on :8080")
 }
