@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 )
 
-
-
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
 		// Serve the index.html file from the templates directory
@@ -29,7 +27,18 @@ func clientHandler(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
+func eventHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/events" {
+		// Serve the events.html file from the templates directory
+		path := filepath.Join("templates", "events.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
+
 func Start() {
+	http.HandleFunc("/events", eventHandler)
 	http.HandleFunc("/clients", clientHandler)
 	http.HandleFunc("/", homeHandler)
 	log.Println("Server started on :8080")
