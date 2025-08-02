@@ -8,6 +8,7 @@ import (
 )
 
 func setupHandlers() {
+	http.HandleFunc("/search_clients", handlers.SearchClientsHandler)
 	http.HandleFunc("/view_clients", handlers.ViewClientsHandler)
 	http.HandleFunc("/add_client", handlers.AddClientHandler)
 	http.HandleFunc("/events", handlers.EventHandler)

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"path/filepath"
 )
-
+// Loads Home Page
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
 		// Serve the index.html file from the templates directory
@@ -16,6 +16,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
+// Handles links within the Homepage
 func ClientHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/clients" {
 		// Server the client.html file from the templates directory
@@ -36,6 +37,7 @@ func EventHandler(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
+// Handles links within the clients page
 func AddClientHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/add_client" {
 		// Serve the add_client.html file from templates director
@@ -50,6 +52,15 @@ func ViewClientsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/view_clients" {
 		// Serve the add_client.html file from templates directory
 		path := filepath.Join("templates", "view_clients.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
+ func SearchClientsHandler(w http.ResponseWriter, r*http.Request) {
+		if r.URL.Path == "/search_clients" {
+		// Serve the add_client.html file from templates directory
+		path := filepath.Join("templates", "search_clients.html")
 		http.ServeFile(w, r, path)
 		return
 	}
