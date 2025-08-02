@@ -8,27 +8,34 @@ import (
 )
 
 func setupHandlers() {
-	// Handles Events
+	// Handles Events page
 	http.HandleFunc("/create_events", handlers.CreateEventsHandler)
 	http.HandleFunc("/view_events", handlers.ViewEventsHandler)
 	http.HandleFunc("/search_events", handlers.SearchEventsHandler)
 
-	// Handles Clients 
+	// Handles Clients page
 	http.HandleFunc("/search_clients", handlers.SearchClientsHandler)
 	http.HandleFunc("/view_clients", handlers.ViewClientsHandler)
 	http.HandleFunc("/add_client", handlers.AddClientHandler)
 	
-	// Handles Home
+	// Handles Home page
 	http.HandleFunc("/events", handlers.EventHandler)
 	http.HandleFunc("/clients", handlers.ClientHandler)
 	http.HandleFunc("/", handlers.HomeHandler)
 }
 
 func ServerStart() {
-
+	// Calls Handlers
 	setupHandlers()
 
-	log.Println("Server started on :8080")
-	log.Println("Press Ctrl+C to stop the server.")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Println("Starting server on :8080...")
+
+	// Start the server and handle any errors
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Printf("Server failed to start: %v\n", err)
+		return
+	}
+
+	log.Println("Server started successfully on :8080")
 }
