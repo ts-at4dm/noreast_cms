@@ -45,3 +45,13 @@ func AddClientHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	http.NotFound(w, r)
 }
+
+func ViewClientsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/view_clients" {
+		// Serve the add_client.html file from templates directory
+		path := filepath.Join("templates", "view_clients.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}
