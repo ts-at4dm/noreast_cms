@@ -35,3 +35,13 @@ func EventHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	http.NotFound(w, r)
 }
+
+func AddClientHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/add_client" {
+		// Serve the add_client.html file from templates director
+		path := filepath.Join("templates", "add_client.html")
+		http.ServeFile(w, r, path)
+		return
+	}
+	http.NotFound(w, r)
+}

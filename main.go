@@ -8,5 +8,5 @@ import (
 
 func main() {
 	log.Println("Starting Noreast CMS server...")
-	server.Start()
+	server.ServerStart()
 }
