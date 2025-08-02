@@ -8,7 +8,7 @@ import (
 
 
 
-func homhandler(w http.ResponseWriter, r *http.Request) {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
 	homepage := r.URL.Path
 	if homepage == "/" {
 		// Serve the index.html file from the templates directory
@@ -21,7 +21,7 @@ func homhandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Start() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", homeHandler)
 	log.Println("Server started on :8080")
 	log.Println("Press Ctrl+C to stop the server.")
 	log.Fatal(http.ListenAndServe(":8080", nil))
