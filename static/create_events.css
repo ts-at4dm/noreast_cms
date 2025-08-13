@@ -1,0 +1,10 @@
+/* create_events.css */
+fieldset {
+    border: 1px solid var(--gray-medium);
+    margin-top: 1rem;
+    padding: 1rem;
+}
+legend {
+    color: var(--teal);
+    font-weight: bold;
+}

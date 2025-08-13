@@ -1,0 +1,31 @@
+/* view_clients.css */
+/* Styles for View Clients table page */
+
+header h1 {
+    color: var(--teal);
+}
+
+table {
+    border: 1px solid var(--gray-medium);
+}
+
+th {
+    background-color: var(--gray-dark);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--gray-light);
+}
+
+tbody tr:hover {
+    background-color: var(--teal);
+    color: black;
+    cursor: pointer;
+}

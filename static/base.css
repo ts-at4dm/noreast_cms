@@ -1,0 +1,116 @@
+/* base.css */
+/* ---------- Color Variables ---------- */
+:root {
+    --teal: #01FFCD;
+    --gray-light: #E6E7E8;
+    --gray-medium: #96989A;
+    --gray-dark: #727376;
+    --black: #000000;
+}
+
+/* ---------- Global Reset ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--gray-light);
+    color: var(--black);
+    line-height: 1.6;
+    padding-bottom: 2rem;
+}
+
+/* ---------- Header & Navbar ---------- */
+header {
+    background-color: var(--black);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+}
+
+nav {
+    background-color: var(--gray-dark);
+    padding: 0.5rem 0;
+}
+
+nav a {
+    color: var(--teal);
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: white;
+}
+
+/* ---------- Forms ---------- */
+form {
+    background-color: white;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    color: var(--gray-dark);
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid var(--gray-medium);
+    border-radius: 3px;
+}
+
+button {
+    background-color: var(--teal);
+    border: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: var(--gray-medium);
+    color: white;
+}
+
+/* ---------- Tables ---------- */
+table {
+    width: 90%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-medium);
+}
+
+th {
+    background-color: var(--gray-dark);
+    color: white;
+}
+
+/* ---------- Utility Classes ---------- */
+.text-center {
+    text-align: center;
+}
+
+.mt-2 { margin-top: 2rem; }
