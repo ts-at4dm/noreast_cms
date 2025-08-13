@@ -11,7 +11,9 @@
   <header>
     <h1>Clients List</h1>
     <nav>
-      <a href="/">Home</a> | <a href="/events">Events</a> | <a href="/clients">Clients</a>
+      <a href="/">Home</a> | 
+      <a href="/events">Events</a> | 
+      <a href="/clients">Clients</a>
     </nav>
   </header>
   <main>
@@ -32,7 +34,21 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Client rows dynamically generated here -->
+        {{range .}}
+        <tr>
+          <td>{{.ID}}</td>
+          <td>{{.FirstName}}</td>
+          <td>{{.LastName}}</td>
+          <td>{{.CompanyName}}</td>
+          <td>{{.Email}}</td>
+          <td>{{.Phone}}</td>
+          <td>{{.Address}}</td>
+          <td>{{.City}}</td>
+          <td>{{.State}}</td>
+          <td>{{.Zip}}</td>
+          <td>{{.DateAdded.Format "2006-01-02"}}</td>
+        </tr>
+        {{end}}
       </tbody>
     </table>
   </main>
