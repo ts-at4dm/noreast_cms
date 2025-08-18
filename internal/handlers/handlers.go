@@ -357,19 +357,126 @@ func CreateEventHandler(w http.ResponseWriter, r *http.Request) {
 
 // ViewEventsHandler - Shows all events
 func ViewEventsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/view_events" {
-		if db == nil {
-			log.Printf("Database connection not initialized")
-			http.Error(w, "Database connection error", http.StatusInternalServerError)
+	if r.URL.Path != "/view_events" {
+		http.NotFound(w, r)
+		return
+	}
+
+	if db == nil {
+		log.Printf("Database connection not initialized")
+		http.Error(w, "Database connection error", http.StatusInternalServerError)
+		return
+	}
+
+	// Query all events
+	rows, err := db.Query(`
+		SELECT id, event_date, event_name, event_type, start_time, end_time, client_id, event_location, ceremony_location, package, guest_count, deposit_amount, deposit_received, total_price, payment_received, payment_date, notes
+		FROM events
+		ORDER BY event_date DESC`)
+	
+	if err != nil {
+		log.Printf("Error querying events: %v", err)
+		http.Error(w, "Error retrieving events", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	//struct to hold event data
+	
+	type PackageType string
+	type EventType string
+
+	type Event struct {
+		ID               int
+		ClientID         int
+		EventDate        time.Time
+		EventName        string
+		EventType        EventType
+		StartTime        time.Time
+		EndTime          time.Time
+		Location         string
+		CeremonyLocation string
+		PackageType      PackageType
+		GuestCount       int
+		DepositAmount    float64
+		DepositReceived  bool
+		TotalPrice       float64
+		PaymentReceived  bool
+		PaymentDate      *time.Time
+		Notes            string
+	}
+
+	var events []Event
+
+	//Read rows into the slice
+	for rows.Next() {
+		var e Event
+
+		// use temp variables for problematic columns
+		var startStr, endStr string
+		var paymentDate sql.NullTime
+
+		if err := rows.Scan(
+			&e.ID,
+			&e.EventDate,
+			&e.EventName,
+			&e.EventType,
+			&startStr,   // TIME → string
+			&endStr,     // TIME → string
+			&e.ClientID,
+			&e.Location,
+			&e.CeremonyLocation,
+			&e.PackageType,
+			&e.GuestCount,
+			&e.DepositAmount,
+			&e.DepositReceived,
+			&e.TotalPrice,
+			&e.PaymentReceived,
+			&paymentDate, // DATE (nullable)
+			&e.Notes,
+		); err != nil {	
+			log.Printf("Error scanning event row: %v", err)
+			http.Error(w, "Error reading event data", http.StatusInternalServerError)
 			return
 		}
 
-		// For now, just serve the template
-		path := filepath.Join("templates", "view_events.html")
-		http.ServeFile(w, r, path)
+		// Parse TIME strings into time.Time
+    	if t, err := time.Parse("15:04:05", startStr); err == nil {
+    	    e.StartTime = t
+    	}
+    	if t, err := time.Parse("15:04:05", endStr); err == nil {
+    	    e.EndTime = t
+    	}
+
+    	// Handle nullable payment_date
+    	if paymentDate.Valid {
+    	    e.PaymentDate = &paymentDate.Time
+    	}
+
+    	events = append(events, e)
+	}	
+
+	// Check for any row iteration errors
+	if err := rows.Err(); err != nil {
+		log.Printf("Error iterating events: %v", err)
+		http.Error(w, "Error retrieving events", http.StatusInternalServerError)
 		return
 	}
-	http.NotFound(w, r)
+
+	// Parse and execute the template
+	tmplPath := filepath.Join("templates", "view_events.html")
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		log.Printf("Error parsing template: %v", err)
+		http.Error(w, "Error loading template", http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.Execute(w, events); err != nil {
+		log.Printf("Error executing template: %v", err)
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
 }
 
 // SearchEventsHandler - Shows event search form
