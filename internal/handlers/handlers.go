@@ -2,15 +2,14 @@ package handlers
 
 import (
 	"database/sql"
+	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
-	"html/template"
 )
-
 
 // Database instance
 var db *sql.DB
@@ -131,80 +130,79 @@ func CreateClientHandler(w http.ResponseWriter, r *http.Request) {
 // ViewClientsHandler - Shows all clients
 // ViewClientsHandler - Shows all clients
 func ViewClientsHandler(w http.ResponseWriter, r *http.Request) {
-    if r.URL.Path != "/view_clients" {
-        http.NotFound(w, r)
-        return
-    }
+	if r.URL.Path != "/view_clients" {
+		http.NotFound(w, r)
+		return
+	}
 
-    if db == nil {
-        log.Printf("Database connection not initialized")
-        http.Error(w, "Database connection error", http.StatusInternalServerError)
-        return
-    }
+	if db == nil {
+		log.Printf("Database connection not initialized")
+		http.Error(w, "Database connection error", http.StatusInternalServerError)
+		return
+	}
 
-    // Query all clients
-    rows, err := db.Query(`
+	// Query all clients
+	rows, err := db.Query(`
         SELECT id, firstname, lastname, company_name, email, phone, st_address, city, state, zip, date_added 
         FROM clients ORDER BY date_added DESC`)
-    if err != nil {
-        log.Printf("Error querying clients: %v", err)
-        http.Error(w, "Error retrieving clients", http.StatusInternalServerError)
-        return
-    }
-    defer rows.Close()
+	if err != nil {
+		log.Printf("Error querying clients: %v", err)
+		http.Error(w, "Error retrieving clients", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
 
-    // Struct to hold client data
-    type Client struct {
-        ID          int
-        FirstName   string
-        LastName    string
-        CompanyName string
-        Email       string
-        Phone       string
-        Address     string
-        City        string
-        State       string
-        Zip         string
-        DateAdded   time.Time
-    }
+	// Struct to hold client data
+	type Client struct {
+		ID          int
+		FirstName   string
+		LastName    string
+		CompanyName string
+		Email       string
+		Phone       string
+		Address     string
+		City        string
+		State       string
+		Zip         string
+		DateAdded   time.Time
+	}
 
-    var clients []Client
+	var clients []Client
 
-    // Read rows into the slice
-    for rows.Next() {
-        var c Client
-        if err := rows.Scan(&c.ID, &c.FirstName, &c.LastName, &c.CompanyName, &c.Email,
-            &c.Phone, &c.Address, &c.City, &c.State, &c.Zip, &c.DateAdded); err != nil {
-            log.Printf("Error scanning client: %v", err)
-            http.Error(w, "Error reading client data", http.StatusInternalServerError)
-            return
-        }
-        clients = append(clients, c)
-    }
+	// Read rows into the slice
+	for rows.Next() {
+		var c Client
+		if err := rows.Scan(&c.ID, &c.FirstName, &c.LastName, &c.CompanyName, &c.Email,
+			&c.Phone, &c.Address, &c.City, &c.State, &c.Zip, &c.DateAdded); err != nil {
+			log.Printf("Error scanning client: %v", err)
+			http.Error(w, "Error reading client data", http.StatusInternalServerError)
+			return
+		}
+		clients = append(clients, c)
+	}
 
-    // Check for any row iteration errors
-    if err := rows.Err(); err != nil {
-        log.Printf("Error iterating rows: %v", err)
-        http.Error(w, "Error reading client list", http.StatusInternalServerError)
-        return
-    }
+	// Check for any row iteration errors
+	if err := rows.Err(); err != nil {
+		log.Printf("Error iterating rows: %v", err)
+		http.Error(w, "Error reading client list", http.StatusInternalServerError)
+		return
+	}
 
-    // Parse and execute the template
-    tmplPath := filepath.Join("templates", "view_clients.html")
-    tmpl, err := template.ParseFiles(tmplPath)
-    if err != nil {
-        log.Printf("Error loading template: %v", err)
-        http.Error(w, "Error loading page", http.StatusInternalServerError)
-        return
-    }
+	// Parse and execute the template
+	tmplPath := filepath.Join("templates", "view_clients.html")
+	tmpl, err := template.ParseFiles(tmplPath)
+	if err != nil {
+		log.Printf("Error loading template: %v", err)
+		http.Error(w, "Error loading page", http.StatusInternalServerError)
+		return
+	}
 
-    if err := tmpl.Execute(w, clients); err != nil {
-        log.Printf("Error executing template: %v", err)
-        http.Error(w, "Error rendering page", http.StatusInternalServerError)
-        return
-    }
+	if err := tmpl.Execute(w, clients); err != nil {
+		log.Printf("Error executing template: %v", err)
+		http.Error(w, "Error rendering page", http.StatusInternalServerError)
+		return
+	}
 }
-
 
 // SearchClientsHandler - Shows client search form
 func SearchClientsHandler(w http.ResponseWriter, r *http.Request) {
@@ -256,6 +254,7 @@ func CreateEventHandler(w http.ResponseWriter, r *http.Request) {
 	eventName := strings.TrimSpace(r.FormValue("event_name"))
 	eventType := strings.TrimSpace(r.FormValue("event_type"))
 	eventLocation := strings.TrimSpace(r.FormValue("event_location"))
+	ceremonyLocation := strings.TrimSpace(r.FormValue("ceremony_location"))
 	packageType := strings.TrimSpace(r.FormValue("package"))
 	notes := strings.TrimSpace(r.FormValue("notes"))
 
@@ -264,12 +263,12 @@ func CreateEventHandler(w http.ResponseWriter, r *http.Request) {
 	startTimeStr := r.FormValue("start_time")
 	endTimeStr := r.FormValue("end_time")
 	paymentDateStr := r.FormValue("payment_date")
-	
+
 	clientIDStr := r.FormValue("client_id")
 	guestCountStr := r.FormValue("guest_count")
 	depositAmountStr := r.FormValue("deposit_amount")
 	totalPriceStr := r.FormValue("total_price")
-	
+
 	depositReceived := r.FormValue("deposit_received") == "1"
 	paymentReceived := r.FormValue("payment_received") == "1"
 
@@ -334,13 +333,13 @@ func CreateEventHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Insert into database
 	query := `INSERT INTO events (event_date, event_name, event_type, start_time, end_time, client_id, 
-              event_location, package, guest_count, deposit_amount, deposit_received, 
+              event_location, ceremony_location, package, guest_count, deposit_amount, deposit_received, 
               total_price, payment_received, payment_date, notes) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	result, err := db.Exec(query,
 		eventDate, eventName, eventType, startTimeStr, endTimeStr, clientID,
-		eventLocation, packageType, guestCount, depositAmount, depositReceived,
+		eventLocation, ceremonyLocation, packageType, guestCount, depositAmount, depositReceived,
 		totalPrice, paymentReceived, paymentDate, notes)
 
 	if err != nil {

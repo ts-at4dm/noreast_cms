@@ -114,3 +114,23 @@ th {
 }
 
 .mt-2 { margin-top: 2rem; }
+
+/* Checkbox group for add-ons */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two columns */
+    gap: 0.5rem 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    color: var(--black);
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: auto; /* prevent full width from global input styles */
+}

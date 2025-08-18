@@ -37,6 +37,7 @@
     <label>Start Time: <input type="time" name="start_time"></label><br>
     <label>End Time: <input type="time" name="end_time"></label><br>
     <label>Event Location: <input type="text" name="event_location" maxlength="255"></label><br>
+    <label>Ceremony Location: <input type="text" name="ceremony_location" maxlength="255"></label><br>
     
     <label>Package: 
       <select name="package">
@@ -44,12 +45,24 @@
         <option value="Bronze">Bronze</option>
         <option value="Silver">Silver</option>
         <option value="Gold">Gold</option>
-        <option value="Platinum">Platinum</option>
+        <option value="Platinum">Platinum</option>c
         <option value="Custom">Custom</option>
       </select>
     </label><br>
+
+  <label>Add-Ons:</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="addons[]" value="Rehearsal Dinner"> Rehearsal Dinner</label>
+    <label><input type="checkbox" name="addons[]" value="Bridal Shower"> Bridal Shower</label>
+    <label><input type="checkbox" name="addons[]" value="Engagement Party"> Engagement Party</label>
+    <label><input type="checkbox" name="addons[]" value="After Party"> After Party</label>
+    <label><input type="checkbox" name="addons[]" value="Ceremony"> Ceremony</label>
+    <label><input type="checkbox" name="addons[]" value="Cocktail Hour"> Cocktail Hour</label>
+    <label><input type="checkbox" name="addons[]" value="Tent Lighting"> Tent Lighting</label>
+    <label><input type="checkbox" name="addons[]" value="Photo Booth"> Photo Booth</label>
+  </div>
     
-    <label>Guest Count: <input type="number" name="guest_count" min="1"></label><br>
+  <label>Guest Count: <input type="number" name="guest_count" min="1"></label><br>
   </fieldset>
   
   <fieldset>

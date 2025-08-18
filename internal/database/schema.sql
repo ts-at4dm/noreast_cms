@@ -23,6 +23,7 @@ CREATE TABLE events (
     end_time TIME,
     client_id INT,
     event_location VARCHAR(255),
+    ceremony_location VARCHAR(255),
     package VARCHAR(50),
     guest_count INT,
     deposit_amount DECIMAL(10,2) NOT NULL,

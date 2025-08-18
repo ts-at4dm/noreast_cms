@@ -60,6 +60,7 @@ type Event struct {
 	StartTime       time.Time     `db:"start_time"`
 	EndTime         time.Time     `db:"end_time"`
 	Location        string        `db:"event_location"`
+	CeremonyLocation string       `db:"ceremony_location"`
 	PackageType     PackageType   `db:"package"`
 	GuestCount      int           `db:"guest_count"`
 	DepositAmount   float64       `db:"deposit_amount"`

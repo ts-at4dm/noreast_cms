@@ -66,7 +66,7 @@ func CreateClient(db *sql.DB, client Client) (int64, error) {
 
 func GetAllEvents(db *sql.DB) ([]Event, error) {
 	query := `SELECT e.id, e.event_date, e.event_name, e.event_type, e.start_time, 
-              e.end_time, e.client_id, e.event_location, e.package, e.guest_count,
+              e.end_time, e.client_id, e.event_location, e.ceremony_location, e.package, e.guest_count,
               e.deposit_amount, e.deposit_received, e.total_price, e.payment_received,
               e.payment_date, e.notes, c.firstname, c.lastname
               FROM events e 
@@ -87,7 +87,7 @@ func GetAllEvents(db *sql.DB) ([]Event, error) {
 		
 		err := rows.Scan(&event.ID, &event.EventDate, &event.EventName,
 			&event.EventType, &event.StartTime, &event.EndTime,
-			&event.ClientID, &event.Location, &event.PackageType,
+			&event.ClientID, &event.Location, &event.CeremonyLocation, &event.PackageType,
 			&event.GuestCount, &event.DepositAmount, &event.DepositReceived,
 			&event.TotalPrice, &event.PaymentReceived, &paymentDate,
 			&event.Notes, &clientFirstName, &clientLastName)
@@ -107,7 +107,7 @@ func GetAllEvents(db *sql.DB) ([]Event, error) {
 
 func GetEventByID(db *sql.DB, id int) (*Event, error) {
 	query := `SELECT id, event_date, event_name, event_type, start_time, end_time,
-              client_id, event_location, package, guest_count, deposit_amount,
+              client_id, event_location, ceremony_location, package, guest_count, deposit_amount,
               deposit_received, total_price, payment_received, payment_date, notes
               FROM events WHERE id = ?`
 	
@@ -116,7 +116,7 @@ func GetEventByID(db *sql.DB, id int) (*Event, error) {
 	
 	err := db.QueryRow(query, id).Scan(&event.ID, &event.EventDate,
 		&event.EventName, &event.EventType, &event.StartTime,
-		&event.EndTime, &event.ClientID, &event.Location,
+		&event.EndTime, &event.ClientID, &event.Location, &event.CeremonyLocation,
 		&event.PackageType, &event.GuestCount, &event.DepositAmount,
 		&event.DepositReceived, &event.TotalPrice, &event.PaymentReceived,
 		&paymentDate, &event.Notes)
@@ -134,13 +134,13 @@ func GetEventByID(db *sql.DB, id int) (*Event, error) {
 
 func CreateEvent(db *sql.DB, event Event) (int64, error) {
 	query := `INSERT INTO events (event_date, event_name, event_type, start_time,
-              end_time, client_id, event_location, package, guest_count,
+              end_time, client_id, event_location, ceremony_location, package, guest_count,
               deposit_amount, deposit_received, total_price, payment_received,
               payment_date, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	
 	result, err := db.Exec(query, event.EventDate, event.EventName,
 		event.EventType, event.StartTime, event.EndTime, event.ClientID,
-		event.Location, event.PackageType, event.GuestCount,
+		event.Location, event.CeremonyLocation, event.PackageType, event.GuestCount,
 		event.DepositAmount, event.DepositReceived, event.TotalPrice,
 		event.PaymentReceived, event.PaymentDate, event.Notes)
 	
